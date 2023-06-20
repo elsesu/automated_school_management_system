@@ -1,0 +1,28 @@
+Private Sub cmbCancel_Click()
+Unload Me
+End Sub
+
+Private Sub cmbLogin_Click()
+Dim userid As String
+Dim password As Variant
+
+userid = txtUsername.Text
+password = txtPassword.Text
+
+If userid = "admin" And password = "admin" Then
+MsgBox "Login Successful", vbInformation
+Application.Visible = True
+
+Unload Me
+
+Else
+MsgBox "You have entered incorrect login info!", vbCritical
+
+ThisWorkbook.Close
+
+End If
+End Sub
+
+Private Sub txtUsername_Change()
+
+End Sub
