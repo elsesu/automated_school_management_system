@@ -1,0 +1,78 @@
+Private Sub cmbClose_Click()
+Unload Me
+End Sub
+
+Private Sub cmbReset_Click()
+Unload Me
+UserForm3.Show
+End Sub
+
+Private Sub cmbSearch_Click()
+
+Dim X As Long
+Dim Y As Long
+
+X = Sheet7.Range("A" & Rows.Count).End(xlUp).Row
+
+For Y = 6 To X
+If Sheet7.Cells(Y, 1).Value = txtApp.Text Then
+txtAdm = Sheet7.Cells(Y, 1).Value
+txtNam = Sheet7.Cells(Y, 2).Value
+txtClass = Sheet7.Cells(Y, 3).Value
+
+If Sheet7.Cells(Y, 4).Value = "MALE" Then
+optaMale.Value = True
+End If
+
+If Sheet7.Cells(Y, 4).Value = "FEMALE" Then
+optaFemale.Value = True
+End If
+
+txtADate = Sheet7.Cells(Y, 5).Value
+txtFee = Sheet7.Cells(Y, 6).Value
+txtFirst = Sheet7.Cells(Y, 7).Value
+txtSecond = Sheet7.Cells(Y, 8).Value
+txtThird = Sheet7.Cells(Y, 9).Value
+txtReceive = Sheet7.Cells(Y, 10).Value
+txtBalance = Sheet7.Cells(Y, 11).Value
+txtStatus = Sheet7.Cells(Y, 12).Value
+
+cmbUpdate.Visible = True
+
+End If
+Next Y
+End Sub
+
+Private Sub cmbUpdate_Click()
+Dim X As Long
+Dim Y As Long
+
+X = Sheet7.Range("A" & Rows.Count).End(xlUp).Row
+
+For Y = 6 To X
+If Sheet7.Cells(Y, 1).Value = txtApp.Text Then
+
+
+
+
+
+Sheet7.Cells(Y, 7).Value = txtFirst.Value
+Sheet7.Cells(Y, 8).Value = txtSecond.Value
+Sheet7.Cells(Y, 9).Value = txtThird.Value
+
+
+End If
+Next Y
+Me.cmbUpdate.Visible = False
+
+MsgBox "Data Updated Successfully"
+Call cmbReset_Click
+End Sub
+
+Private Sub ListBox1_Click()
+txtApp = ListBox1.Column(0)
+End Sub
+
+Private Sub txtAdm_Change()
+
+End Sub
