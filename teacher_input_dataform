@@ -1,0 +1,472 @@
+Dim FPATH As String
+
+Private Sub cmbAddphoto_Click()
+Dim X As Integer
+Application.fileDialog(msoFileDialogOpen).AllowMultiSelect = FASLE
+X = Application.fileDialog(msoFileDialogOpen).Show
+If X <> 0 Then
+FPATH = Application.fileDialog(msoFileDialogOpen).SelectedItems(1)
+Image1.Picture = LoadPicture(FPATH)
+Image1.PictureSizeMode = 1
+End If
+End Sub
+
+Private Sub cmbClose_Click()
+Unload Me
+End Sub
+
+Private Sub cmbReset_Click()
+Unload Me
+UserForm2.Show
+End Sub
+
+Private Sub cmbSave_Click()
+
+If Len(txtNam) = 0 Then
+MsgBox "Please Enter Name"
+txtNam.SetFocus
+Exit Sub
+End If
+
+If Len(txtDob) = 0 Then
+MsgBox "Please Enter Date of Birth"
+txtDob.SetFocus
+Exit Sub
+End If
+
+If Len(txtPhone) = 0 Then
+MsgBox "Please Enter Phone number"
+txtPhone.SetFocus
+Exit Sub
+End If
+
+If Len(txtHome) = 0 Then
+MsgBox "Please Enter Name of Hometown"
+txtHome.SetFocus
+Exit Sub
+End If
+
+
+
+Dim X As Long
+Dim Y As Worksheet
+
+Set Y = Sheet4
+
+X = Y.Range("A" & Rows.Count).End(xlUp).Row + 1
+With Y
+.Cells(X, 1).Value = txtId.Text
+.Cells(X, 2).Value = txtNam.Text
+
+If optaMale.Value = True Then
+.Cells(X, 3).Value = "MALE"
+End If
+
+If optaFemale.Value = True Then
+.Cells(X, 3).Value = "FEMALE"
+End If
+
+.Cells(X, 4).Value = txtDob.Text
+.Cells(X, 5).Value = txtNin.Text
+.Cells(X, 6).Value = txtRegNo.Text
+.Cells(X, 7).Value = [Text(Now(),"DD-MM-YYYY")]
+
+.Cells(X, 8).Value = cmbDesig.Text
+.Cells(X, 9).Value = cmbQual.Text
+.Cells(X, 10).Value = cmbtCert.Text
+.Cells(X, 11).Value = cmbRank.Text
+
+.Cells(X, 12).Value = txtLastpm.Text
+.Cells(X, 13).Value = txtPhone.Text
+.Cells(X, 14).Value = txtEmail.Text
+.Cells(X, 15).Value = txtBank.Text
+.Cells(X, 16).Value = txtAccount.Text
+.Cells(X, 17).Value = txtGross.Text
+.Cells(X, 18).Value = txtNet.Text
+.Cells(X, 19).Value = txtHome.Text
+.Cells(X, 20).Value = txtKin.Text
+.Cells(X, 21).Value = txtRelation.Text
+.Cells(X, 21).Value = txtContact.Text
+End With
+
+On Error Resume Next
+ Dim i As Integer
+    i = CInt(txtId.Text)
+    FileCopy FPATH, "C:\Teacher Data\Image\" & Format(i, "0") & ".JPG"
+
+MsgBox "Save Successfully"
+
+Unload Me
+UserForm2.Show
+End Sub
+
+Private Sub cmbSearch_Click()
+cmbSave.Enabled = False
+    Dim X As Long
+    Dim Y As Long
+
+    X = Sheet4.Range("A" & Rows.Count).End(xlUp).Row
+
+    For Y = 2 To X
+        If Sheet4.Cells(Y, 1).Value = txtApp.Text Then
+txtId = Sheet4.Cells(Y, 1).Value
+txtNam = Sheet4.Cells(Y, 2).Value
+
+If Sheet4.Cells(Y, 3).Value = "MALE" Then
+optaMale.Value = True
+End If
+
+If Sheet4.Cells(Y, 3).Value = "FEMALE" Then
+optaFemale.Value = True
+End If
+
+
+txtDob = Sheet4.Cells(Y, 4).Value
+txtNin = Sheet4.Cells(Y, 5).Value
+txtRegNo = Sheet4.Cells(Y, 6).Value
+txtDoap = Sheet4.Cells(Y, 7).Value
+
+cmbDesig = Sheet4.Cells(Y, 8).Value
+cmbQual = Sheet4.Cells(Y, 9).Value
+cmbtCert = Sheet4.Cells(Y, 10).Value
+cmbRank = Sheet4.Cells(Y, 11).Value
+
+txtLastpm = Sheet4.Cells(Y, 12).Value
+txtPhone = Sheet4.Cells(Y, 13).Value
+txtEmail = Sheet4.Cells(Y, 14).Value
+txtBank = Sheet4.Cells(Y, 15).Value
+txtAccount = Sheet4.Cells(Y, 16).Value
+txtGross = Sheet4.Cells(Y, 17).Value
+txtNet = Sheet4.Cells(Y, 18).Value
+txtHome = Sheet4.Cells(Y, 19).Value
+txtKin = Sheet4.Cells(Y, 20).Value
+txtRelation = Sheet4.Cells(Y, 21).Value
+txtContact = Sheet4.Cells(Y, 22).Value
+
+cmbUpdate.Visible = True
+
+On Error Resume Next
+Image1.Picture = LoadPicture("C:\Teacher Data\Image\" & txtApp.Text & Value & ".JPG")
+Image1.PictureSizeMode = 1
+
+End If
+Next Y
+End Sub
+
+Private Sub cmbUpdate_Click()
+Dim X As Long
+Dim Y As Long
+
+X = Sheet4.Range("A" & Rows.Count).End(xlUp).Row
+
+For Y = 2 To X
+If Sheet4.Cells(Y, 1).Value = txtApp.Text Then
+Sheet4.Cells(Y, 1).Value = txtId.Value
+Sheet4.Cells(Y, 2).Value = txtNam.Value
+
+
+If optaMale.Value = True Then
+Sheet4.Cells(Y, 3).Value = "MALE"
+End If
+
+If optaFemale.Value = True Then
+Sheet4.Cells(Y, 3).Value = "FEMALE"
+End If
+
+Sheet4.Cells(X, 4).Value = txtDob.Text
+Sheet4.Cells(X, 5).Value = txtNin.Text
+Sheet4.Cells(X, 6).Value = txtRegNo.Text
+Sheet4.Cells(X, 7).Value = txtDoap.Text
+
+Sheet4.Cells(X, 8).Value = cmbDesig.Text
+Sheet4.Cells(X, 9).Value = cmbQual.Text
+Sheet4.Cells(X, 10).Value = cmbtCert.Text
+Sheet4.Cells(X, 11).Value = cmbRank.Text
+
+Sheet4.Cells(X, 12).Value = txtLastpm.Text
+Sheet4.Cells(X, 13).Value = txtPhone.Text
+Sheet4.Cells(X, 14).Value = txtEmail.Text
+Sheet4.Cells(X, 15).Value = txtBank.Text
+Sheet4.Cells(X, 16).Value = txtAccount.Text
+Sheet4.Cells(X, 17).Value = txtGross.Text
+Sheet4.Cells(X, 18).Value = txtNet.Text
+Sheet4.Cells(X, 19).Value = txtHome.Text
+Sheet4.Cells(X, 20).Value = txtKin.Text
+Sheet4.Cells(X, 21).Value = txtRelation.Text
+Sheet4.Cells(X, 22).Value = txtContact.Text
+
+End If
+Next Y
+Me.cmbUpdate.Visible = False
+On Error Resume Next
+Dim i As String
+i = txtId.Text
+FileCopy FPATH, "C:\Teacher Data\Image\" & i & ".JPG"
+
+MsgBox "Data Updated Successfully"
+Call cmbReset_Click
+End Sub
+
+
+
+Private Sub ListBox1_Click()
+txtApp = ListBox1.Column(0)
+End Sub
+
+
+Private Sub txtAccount_keypress(ByVal KeyAscii As MSForms.ReturnInteger)
+ ' Check if the pressed key is a number (ASCII codes 48-57)
+    If KeyAscii < 48 Or KeyAscii > 57 Then
+        ' Cancel the keypress event if the input is not a number
+        KeyAscii = 0
+        MsgBox "Input a number, Spaces and characters not allowed.", vbExclamation, "Invalid Input"
+    End If
+End Sub
+
+Private Sub txtApp_Change()
+
+End Sub
+
+Private Sub txtBank_Change()
+ Dim originalText As String
+    originalText = txtBank.Text
+
+    ' Remove any non-alphabetic characters from the entered text
+    Dim cleanedText As String
+    Dim i As Long
+    For i = 1 To Len(originalText)
+        Dim currentChar As String
+        currentChar = Mid(originalText, i, 1)
+        If IsAlphabetic(currentChar) Or currentChar = " " Then
+            cleanedText = cleanedText & currentChar
+        Else
+            ' Display an error message when a non-alphabetic character is entered
+            MsgBox "Only alphabets are allowed.", vbExclamation, "Invalid Input"
+            Exit Sub
+        End If
+    Next i
+
+    ' Convert the cleaned text to uppercase
+    txtBank.Text = UCase(cleanedText)
+
+    ' Check if the converted text is different from the original text
+    If txtBank.Text <> originalText Then
+        ' Restore the cursor position
+        txtBank.SelStart = Len(originalText)
+    End If
+End Sub
+
+Private Sub txtContact_keypress(ByVal KeyAscii As MSForms.ReturnInteger)
+' Check if the pressed key is a number (ASCII codes 48-57)
+    If KeyAscii < 48 Or KeyAscii > 57 Then
+        ' Cancel the keypress event if the input is not a number
+        KeyAscii = 0
+        MsgBox "Input a number, Spaces and characters not allowed.", vbExclamation, "Invalid Input"
+    End If
+End Sub
+
+Private Sub txtDob_Change()
+
+End Sub
+
+Private Sub txtEmail_Change()
+txtEmail = UCase(Me.txtEmail.Text)
+End Sub
+
+Private Sub txtGross_keypress(ByVal KeyAscii As MSForms.ReturnInteger)
+' Check if the pressed key is a number (ASCII codes 48-57)
+    If KeyAscii < 48 Or KeyAscii > 57 Then
+        ' Cancel the keypress event if the input is not a number
+        KeyAscii = 0
+        MsgBox "Input a number, Spaces and characters not allowed.", vbExclamation, "Invalid Input"
+    End If
+End Sub
+
+Private Sub txtHome_Change()
+  Dim originalText As String
+    originalText = txtHome.Text
+
+    ' Remove any non-alphabetic characters from the entered text
+    Dim cleanedText As String
+    Dim i As Long
+    For i = 1 To Len(originalText)
+        Dim currentChar As String
+        currentChar = Mid(originalText, i, 1)
+        If IsAlphabetic(currentChar) Or currentChar = " " Then
+            cleanedText = cleanedText & currentChar
+        Else
+            ' Display an error message when a non-alphabetic character is entered
+            MsgBox "Only alphabets are allowed.", vbExclamation, "Invalid Input"
+            Exit Sub
+        End If
+    Next i
+
+    ' Convert the cleaned text to uppercase
+    txtHome.Text = UCase(cleanedText)
+
+    ' Check if the converted text is different from the original text
+    If txtHome.Text <> originalText Then
+        ' Restore the cursor position
+        txtHome.SelStart = Len(originalText)
+    End If
+End Sub
+
+Private Sub txtId_Change()
+txtId = UCase(Me.txtId.Text)
+End Sub
+
+Private Sub txtKin_Change()
+ Dim originalText As String
+    originalText = txtKin.Text
+
+    ' Remove any non-alphabetic characters from the entered text
+    Dim cleanedText As String
+    Dim i As Long
+    For i = 1 To Len(originalText)
+        Dim currentChar As String
+        currentChar = Mid(originalText, i, 1)
+        If IsAlphabetic(currentChar) Or currentChar = " " Then
+            cleanedText = cleanedText & currentChar
+        Else
+            ' Display an error message when a non-alphabetic character is entered
+            MsgBox "Only alphabets are allowed.", vbExclamation, "Invalid Input"
+            Exit Sub
+        End If
+    Next i
+
+    ' Convert the cleaned text to uppercase
+    txtKin.Text = UCase(cleanedText)
+
+    ' Check if the converted text is different from the original text
+    If txtKin.Text <> originalText Then
+        ' Restore the cursor position
+        txtKin.SelStart = Len(originalText)
+    End If
+End Sub
+
+Private Sub txtQual_Change()
+
+End Sub
+
+Private Sub txtRank_Change()
+
+End Sub
+
+
+Private Sub txtNam_Change()
+    Dim originalText As String
+    originalText = txtNam.Text
+
+    ' Remove any non-alphabetic characters from the entered text
+    Dim cleanedText As String
+    Dim i As Long
+    For i = 1 To Len(originalText)
+        Dim currentChar As String
+        currentChar = Mid(originalText, i, 1)
+        If IsAlphabetic(currentChar) Or currentChar = " " Then
+            cleanedText = cleanedText & currentChar
+        Else
+            ' Display an error message when a non-alphabetic character is entered
+            MsgBox "Only alphabets are allowed.", vbExclamation, "Invalid Input"
+            Exit Sub
+        End If
+    Next i
+
+    ' Convert the cleaned text to uppercase
+    txtNam.Text = UCase(cleanedText)
+
+    ' Check if the converted text is different from the original text
+    If txtNam.Text <> originalText Then
+        ' Restore the cursor position
+        txtNam.SelStart = Len(originalText)
+    End If
+End Sub
+
+Private Function IsAlphabetic(ByVal str As String) As Boolean
+    IsAlphabetic = str Like "[A-Za-z]"
+End Function
+
+
+Private Sub txtNet_keypress(ByVal KeyAscii As MSForms.ReturnInteger)
+' Check if the pressed key is a number (ASCII codes 48-57)
+    If KeyAscii < 48 Or KeyAscii > 57 Then
+        ' Cancel the keypress event if the input is not a number
+        KeyAscii = 0
+        MsgBox "Input a number, Spaces and characters not allowed.", vbExclamation, "Invalid Input"
+    End If
+End Sub
+
+Private Sub txtNin_keypress(ByVal KeyAscii As MSForms.ReturnInteger)
+' Check if the pressed key is a number (ASCII codes 48-57)
+    If KeyAscii < 48 Or KeyAscii > 57 Then
+        ' Cancel the keypress event if the input is not a number
+        KeyAscii = 0
+        MsgBox "Input a number,Spaces and characters not allowed.", vbExclamation, "Invalid Input"
+    End If
+End Sub
+
+Private Sub txtPhone_keypress(ByVal KeyAscii As MSForms.ReturnInteger)
+' Check if the pressed key is a number (ASCII codes 48-57)
+    If KeyAscii < 48 Or KeyAscii > 57 Then
+        ' Cancel the keypress event if the input is not a number
+        KeyAscii = 0
+        MsgBox "Input a number,Spaces and characters not allowed.", vbExclamation, "Invalid Input"
+    End If
+End Sub
+
+Private Sub txtRegNo_keypress(ByVal KeyAscii As MSForms.ReturnInteger)
+' Check if the pressed key is a number (ASCII codes 48-57)
+    If KeyAscii < 48 Or KeyAscii > 57 Then
+        ' Cancel the keypress event if the input is not a number
+        KeyAscii = 0
+        MsgBox "Input a number,Spaces and characters not allowed.", vbExclamation, "Invalid Input"
+    End If
+End Sub
+
+Private Sub txtRelation_Change()
+   Dim originalText As String
+    originalText = txtRelation.Text
+
+    ' Remove any non-alphabetic characters from the entered text
+    Dim cleanedText As String
+    Dim i As Long
+    For i = 1 To Len(originalText)
+        Dim currentChar As String
+        currentChar = Mid(originalText, i, 1)
+        If IsAlphabetic(currentChar) Or currentChar = " " Then
+            cleanedText = cleanedText & currentChar
+        Else
+            ' Display an error message when a non-alphabetic character is entered
+            MsgBox "Only alphabets are allowed.", vbExclamation, "Invalid Input"
+            Exit Sub
+        End If
+    Next i
+
+    ' Convert the cleaned text to uppercase
+    txtRelation.Text = UCase(cleanedText)
+
+    ' Check if the converted text is different from the original text
+    If txtRelation.Text <> originalText Then
+        ' Restore the cursor position
+        txtRelation.SelStart = Len(originalText)
+    End If
+End Sub
+Private Sub UserForm_Initialize()
+    Dim lastId As Long
+    lastId = Application.WorksheetFunction.Max(Sheet4.Range("A:A"))
+    ' Extract the numeric part from the last ID
+    Dim numericPart As Long
+    numericPart = Val(lastId)
+    ' Increment the numeric part by 1
+    numericPart = numericPart + 1
+    ' Format the numeric part as a three-digit string with leading zeros
+    Dim newId As String
+    newId = Format(numericPart, "000")
+    ' Assign the new ID to the textbox
+    txtId.Text = newId
+
+    On Error Resume Next
+    MkDir "C:\Teacher Data"
+    MkDir "C:\Teacher Data\Image"
+End Sub
+
