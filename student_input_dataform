@@ -1,0 +1,341 @@
+Dim FPATH As String
+
+Private Sub cmbAdd_Click()
+If Len(txtNam) = 0 Then
+        MsgBox "PLEASE ENTER NAME"
+        txtNam.SetFocus
+        Exit Sub
+    End If
+    
+    If Len(cmbClass) = 0 Then
+        MsgBox "PLEASE CHOOSE CLASS"
+        cmbClass.SetFocus
+        Exit Sub
+    End If
+    
+    If Len(txtDob) = 0 Then
+        MsgBox "PLEASE ENTER DATE OF BIRTH"
+        txtDob.SetFocus
+        Exit Sub
+    End If
+    
+    
+    If Len(txtDoaf) = 0 Then
+        MsgBox "PLEASE ENTER ADMISSION FEE"
+        txtDoaf.SetFocus
+        Exit Sub
+    End If
+    
+    If Len(txtGuardian) = 0 Then
+        MsgBox "PLEASE ENTER GUARDIAN NAME"
+        txtGuardian.SetFocus
+        Exit Sub
+    End If
+    
+    If Len(txtDress) = 0 Then
+        MsgBox "PLEASE ENTER ADDRESS"
+        txtDress.SetFocus
+        Exit Sub
+    End If
+    
+    If Len(txtContact) = 0 Then
+        MsgBox "PLEASE ENTER CONTACT NUMBER"
+        txtContact.SetFocus
+        Exit Sub
+    End If
+    
+    Dim X As Long
+    Dim Y As Worksheet
+    Set Y = Sheet3
+    X = Y.Range("A" & Rows.Count).End(xlUp).Row + 1
+    With Y
+        .Cells(X, 1).Value = txtAdm.Text
+        .Cells(X, 2).Value = txtNam.Text
+        .Cells(X, 3).Value = cmbClass.Text
+        If optMale1.Value = True Then
+            .Cells(X, 4).Value = "MALE"
+        End If
+        If optFemale1.Value = True Then
+            .Cells(X, 4).Value = "FEMALE"
+        End If
+        .Cells(X, 5).Value = txtDob.Text
+        .Cells(X, 6).Value = [Text(Now(),"DD-MM-YYYY")]
+        .Cells(X, 7).Value = txtDoaf.Text
+        .Cells(X, 8).Value = txtGuardian.Text
+        .Cells(X, 9).Value = txtDress.Text
+        .Cells(X, 10).Value = txtContact.Text
+    End With
+    
+    On Error Resume Next
+     Dim i As Integer
+    i = CInt(txtAdm.Text)
+    FileCopy FPATH, "C:\My School\Image\" & Format(i, "0") & ".JPG"
+    
+    MsgBox "SAVED SUCCESSFULLY"
+    
+    Unload Me
+    UserForm1.Show
+End Sub
+
+Private Sub cmbAddphoto_Click()
+Dim X As Integer
+    Dim fileDialog As fileDialog
+    Set fileDialog = Application.fileDialog(msoFileDialogFilePicker)
+    
+    With fileDialog
+        .AllowMultiSelect = False
+        .Title = "Select Photo"
+        .Filters.CLEAR
+        .Filters.Add "Image Files", "*.jpg; *.jpeg; *.png; *.gif"
+        X = .Show
+        If X <> 0 Then
+            FPATH = .SelectedItems(1)
+            Image1.Picture = LoadPicture(FPATH)
+            Image1.PictureSizeMode = fmPictureSizeModeStretch
+        End If
+    End With
+End Sub
+
+Private Sub cmbClose_Click()
+Unload Me
+End Sub
+
+Private Sub cmbDelete_Click()
+Dim X As Long
+Dim Y As Long
+
+X = Sheet3.Range("A" & Rows.Count).End(xlUp).Row
+
+For Y = 2 To X
+
+If Sheet3.Cells(Y, 1).Value = txtApp.Text Then
+Rows(Y).Delete SHIFT:=xlUp
+End If
+Next Y
+Me.cmbDelete.Visible = False
+Me.cmbUpdate.Visible = False
+MsgBox "DATA DELETED SUCCESSFULLY"
+Call cmbReset_Click
+End Sub
+
+Private Sub cmbReset_Click()
+Unload Me
+UserForm1.Show
+End Sub
+
+Private Sub cmbSearch_Click()
+cmbAdd.Enabled = False
+Dim X As Long
+Dim Y As Long
+
+X = Sheet3.Range("A" & Rows.Count).End(xlUp).Row
+
+For Y = 2 To X
+
+If Sheet3.Cells(Y, 1).Value = txtApp.Text Then
+
+txtAdm = Sheet3.Cells(Y, 1).Value
+txtNam = Sheet3.Cells(Y, 2).Value
+cmbClass = Sheet3.Cells(Y, 3).Value
+
+If Sheet3.Cells(Y, 4).Value = "MALE" Then
+optMale1.Value = True
+End If
+
+If Sheet3.Cells(Y, 4).Value = "FEMALE" Then
+optFemale1.Value = True
+End If
+
+txtDob = Sheet3.Cells(Y, 5).Value
+txtDoa = Sheet3.Cells(Y, 6).Value
+txtDoaf = Sheet3.Cells(Y, 7).Value
+txtGuardian = Sheet3.Cells(Y, 8).Value
+txtDress = Sheet3.Cells(Y, 9).Value
+txtContact = Sheet3.Cells(Y, 10).Value
+cmbUpdate.Visible = True
+On Error Resume Next
+Image1.Picture = LoadPicture("C:\My School\Image\" & txtApp.Text & Value & ".JPG")
+Image1.PictureSizeMode = 1
+End If
+Next Y
+End Sub
+
+Private Sub cmbUpdate_Click()
+Dim X As Long
+Dim Y As Long
+
+X = Sheet3.Range("A" & Rows.Count).End(xlUp).Row
+
+For Y = 2 To X
+
+If Sheet3.Cells(Y, 1).Value = txtApp.Text Then
+
+Sheet3.Cells(Y, 1).Value = txtAdm.Value
+Sheet3.Cells(Y, 2).Value = txtNam.Value
+Sheet3.Cells(Y, 3).Value = cmbClass.Value
+
+If optMale1.Value = True Then
+Sheet3.Cells(Y, 4).Value = "MALE"
+End If
+If optFemale1.Value = True Then
+Sheet3.Cells(Y, 4).Value = "FEMALE"
+End If
+
+
+Sheet3.Cells(Y, 5).Value = txtDob.Value
+Sheet3.Cells(Y, 6).Value = txtDoa.Value
+Sheet3.Cells(Y, 7).Value = txtDoaf.Value
+Sheet3.Cells(Y, 8).Value = txtGuardian.Value
+Sheet3.Cells(Y, 9).Value = txtDress.Value
+Sheet3.Cells(Y, 10).Value = txtContact.Value
+
+End If
+Next Y
+Me.cmbUpdate.Visible = False
+On Error Resume Next
+Dim i As String
+i = txtAdm.Text
+FileCopy FPATH, "C:\My School\Image\" & i & ".JPG"
+
+MsgBox "DATA UPDATED SUCCESSFULLY"
+Call cmbReset_Click
+End Sub
+
+Private Sub ListBox1_Click()
+txtApp = ListBox1.Column(0)
+End Sub
+
+Private Sub txtAdm_Change()
+
+End Sub
+
+Private Sub txtApp_Change()
+
+End Sub
+
+Private Sub txtContact_keypress(ByVal KeyAscii As MSForms.ReturnInteger)
+ ' Check if the pressed key is a number (ASCII codes 48-57)
+    If KeyAscii < 48 Or KeyAscii > 57 Then
+        ' Cancel the keypress event if the input is not a number
+        KeyAscii = 0
+        MsgBox "Spaces and characters not allowed.", vbExclamation, "Invalid Input"
+    End If
+End Sub
+
+Private Sub txtDob_Change()
+ 
+End Sub
+
+Private Sub txtDress_Change()
+Dim originalText As String
+    originalText = txtDress.Text
+
+    ' Remove any non-alphanumeric characters from the entered text
+    Dim cleanedText As String
+    Dim i As Long
+    For i = 1 To Len(originalText)
+        Dim currentChar As String
+        currentChar = Mid(originalText, i, 1)
+        If IsAlphaNumericOrSpace(currentChar) Then
+            cleanedText = cleanedText & currentChar
+        End If
+    Next i
+
+    ' Convert the cleaned text to uppercase
+    txtDress.Text = UCase(cleanedText)
+
+    ' Check if the converted text is different from the original text
+    If txtDress.Text <> originalText Then
+        ' Restore the cursor position
+        txtDress.SelStart = Len(originalText)
+    End If
+End Sub
+
+Private Function IsAlphaNumericOrSpace(ByVal str As String) As Boolean
+    IsAlphaNumericOrSpace = str Like "[0-9a-zA-Z ]"
+End Function
+
+Private Sub txtGuardian_Change()
+ Dim originalText As String
+    originalText = txtGuardian.Text
+
+    ' Remove any non-alphabetic characters from the entered text
+    Dim cleanedText As String
+    Dim i As Long
+    For i = 1 To Len(originalText)
+        Dim currentChar As String
+        currentChar = Mid(originalText, i, 1)
+        If IsAlphabetic(currentChar) Or currentChar = " " Then
+            cleanedText = cleanedText & currentChar
+        Else
+            ' Display an error message when a non-alphabetic character is entered
+            MsgBox "Only alphabets  are allowed.", vbExclamation, "Invalid Input"
+            Exit Sub
+        End If
+    Next i
+
+    ' Convert the cleaned text to uppercase
+    txtGuardian.Text = UCase(cleanedText)
+
+    ' Check if the converted text is different from the original text
+    If txtGuardian.Text <> originalText Then
+        ' Restore the cursor position
+        txtGuardian.SelStart = Len(originalText)
+    End If
+End Sub
+
+Private Sub txtNam_Change()
+    Dim originalText As String
+    originalText = txtNam.Text
+
+    ' Remove any non-alphabetic characters from the entered text
+    Dim cleanedText As String
+    Dim i As Long
+    For i = 1 To Len(originalText)
+        Dim currentChar As String
+        currentChar = Mid(originalText, i, 1)
+        If IsAlphabetic(currentChar) Or currentChar = " " Then
+            cleanedText = cleanedText & currentChar
+        Else
+            ' Display an error message when a non-alphabetic character is entered
+            MsgBox "Only alphabets and spaces are allowed.", vbExclamation, "Invalid Input"
+            Exit Sub
+        End If
+    Next i
+
+    ' Convert the cleaned text to uppercase
+    txtNam.Text = UCase(cleanedText)
+
+    ' Check if the converted text is different from the original text
+    If txtNam.Text <> originalText Then
+        ' Restore the cursor position
+        txtNam.SelStart = Len(originalText)
+    End If
+End Sub
+
+Private Function IsAlphabetic(ByVal str As String) As Boolean
+    IsAlphabetic = str Like "[A-Za-z]"
+End Function
+
+   
+
+
+Private Sub UserForm_Initialize()
+    Dim lastAdm As Long
+    lastAdm = Application.WorksheetFunction.Max(Sheet3.Range("A:A"))
+    ' Extract the numeric part from the last admission number
+    Dim numericPart As Long
+    numericPart = Val(Right(lastAdm, Len(lastAdm) - 3))
+    ' Increment the numeric part by 1
+    numericPart = numericPart + 1
+    ' Format the numeric part as a three-digit string with leading zeros
+    Dim newAdm As String
+    newAdm = Format(numericPart, "000")
+    ' Assign the new admission number to the textbox
+    txtAdm.Text = newAdm
+
+    On Error Resume Next
+    MkDir "C:\My School"
+    MkDir "C:\My School\Image"
+End Sub
+
